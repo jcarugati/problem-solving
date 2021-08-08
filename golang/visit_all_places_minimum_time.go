@@ -1,7 +1,7 @@
 package golang
 
 // VisitAllPlacesMinimumTime This implementation does not work for array where len(array) > 1000.
-// Extremily underperforming. Shoud not be used.
+// Extremily underperforming. Should not be used.
 func VisitAllPlacesMinimumTime(A []int) int {
 	var (
 		visitTracker = make(map[int]bool)
@@ -41,4 +41,38 @@ func checkVisitedAll(tracker map[int]bool) bool {
 		}
 	}
 	return all
+}
+
+func VisitAllPlacesMinimumTimeV2(A []int) int {
+	needed := make(map[int]int)
+	for _, e := range A {
+		needed[e] = 1
+	}
+
+	missing := len(needed)
+
+	curI := 0
+	resultI := 0
+	resultJ := 0
+
+	for curJ, num := range A {
+		curJ++
+		if needed[num] > 0 {
+			missing--
+		}
+		needed[num]--
+
+		if missing == 0 {
+			for curI < curJ && needed[A[curI]] < 0 {
+				needed[A[curI]]++
+				curI++
+			}
+
+			if resultJ == 0 || curJ-curI <= resultJ-resultI {
+				resultI, resultJ = curI, curJ
+			}
+		}
+	}
+	return resultJ - resultI
+
 }
