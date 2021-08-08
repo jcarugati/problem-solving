@@ -43,36 +43,38 @@ func checkVisitedAll(tracker map[int]bool) bool {
 	return all
 }
 
+// VisitAllPlacesMinimumTimeV2 is the rigth way to efficiently solve the problem.
 func VisitAllPlacesMinimumTimeV2(A []int) int {
-	needed := make(map[int]int)
+	var (
+		tracker         = make(map[int]int)
+		missing         = len(tracker)
+		initPosition    = 0
+		initResPosition = 0
+		endResPosition  = 0
+	)
+
 	for _, e := range A {
-		needed[e] = 1
+		tracker[e] = 1
 	}
 
-	missing := len(needed)
-
-	curI := 0
-	resultI := 0
-	resultJ := 0
-
-	for curJ, num := range A {
-		curJ++
-		if needed[num] > 0 {
+	for endPosition, num := range A {
+		endPosition++
+		if tracker[num] > 0 {
 			missing--
 		}
-		needed[num]--
+		tracker[num]--
 
 		if missing == 0 {
-			for curI < curJ && needed[A[curI]] < 0 {
-				needed[A[curI]]++
-				curI++
+			for initPosition < endPosition && tracker[A[initPosition]] < 0 {
+				tracker[A[initPosition]]++
+				initPosition++
 			}
 
-			if resultJ == 0 || curJ-curI <= resultJ-resultI {
-				resultI, resultJ = curI, curJ
+			if endResPosition == 0 || endPosition-initPosition <= endResPosition-initResPosition {
+				initResPosition, endResPosition = initPosition, endPosition
 			}
 		}
 	}
-	return resultJ - resultI
+	return endResPosition - initResPosition
 
 }
