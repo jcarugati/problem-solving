@@ -1,4 +1,4 @@
-package golang
+package work
 
 // VisitAllPlacesMinimumTime This implementation does not work for array where len(array) > 1000.
 // Extremily underperforming. Should not be used.
